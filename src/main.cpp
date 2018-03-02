@@ -33,6 +33,7 @@ double getRandDouble(double l, double r)
 }
 
 Timer t60(1.0 / 60);
+Timer t1(1.0/1.0);
 
 
 /* Render the scene with openGL */
@@ -92,6 +93,15 @@ void draw()
     }
 }
 
+void myfun(GLFWwindow *window){
+    int view = glfwGetKey(window, GLFW_KEY_C);
+    if(view)
+    {
+        defView = (defView + 1)%4;
+
+    }
+}
+
 void tick_input(GLFWwindow *window) {
     int left  = glfwGetKey(window, GLFW_KEY_A);
     int right = glfwGetKey(window, GLFW_KEY_D);
@@ -100,8 +110,13 @@ void tick_input(GLFWwindow *window) {
     int forward = glfwGetKey(window, GLFW_KEY_W);
     int back = glfwGetKey(window, GLFW_KEY_S);
     int jump = glfwGetKey(window, GLFW_KEY_SPACE);
-    int view = glfwGetKey(window, GLFW_KEY_C);
+    int fire = glfwGetKey(window, GLFW_KEY_F);
     int rotate = glfwGetKey(window, GLFW_KEY_B);
+    if(fire){
+        glm::vec3 hell = boat1.release_fireball();
+//        cout << hell.x << " " << hell.y << " " << hell.z << endl;a
+//        cout << boat1.fireball.position.x << " " << boat1.fireball.position.y << " " << boat1.fireball.position.z << endl;
+    }
     if(rotate){
         boat1.rotation += 0.1;
         boat1.cannon.rotation += 0.1;
@@ -129,11 +144,7 @@ void tick_input(GLFWwindow *window) {
     {
         boat1.jump();
     }
-    if(view)
-    {
-        defView = (defView + 1)%4;
-        
-    }
+
 }
 
 void tick_elements() {
@@ -150,9 +161,9 @@ void initGL(GLFWwindow *window, int width, int height)
 
     water1 = Water(0, 0, -2,500);
     boat1 = Boat(0, 0, 0);
-    boat1.add_cannon(0, 0, 0);
-//    boat2 = Boat(5,5,0);
-//    cannon1 = Cannon(0, 0, 0);
+    boat1.add_cannon(0, 0, 0, 3);
+//    boat1.release_fireball();
+    boat1.add_poal(0, 0, 0, 8, 0.1);
     for(int i=0;i<rocks.size();i++)
     {
         rocks[i] = Rock( 
@@ -212,7 +223,9 @@ int main(int argc, char **argv) {
             tick_elements();
             tick_input(window);
         }
-
+        if(t1.processTick()){
+            myfun(window);
+        }
         // Poll for Keyboard and mouse events
         glfwPollEvents();
     }

@@ -1,19 +1,18 @@
 #include "main.h"
 
-#ifndef CANNON_H
-#define CANNON_H
+#ifndef CYLINDER_H
+#define CYLINDER_H
 
 
-class Cannon {
+class Cylinder {
 public:
-    Cannon() {}
-    Cannon(float x, float y, float z, float height);
+    Cylinder() {}
+    Cylinder(float x, float y, float z, float height, float radius);
     glm::vec3 position;
     glm::vec3 speed;
     glm::vec3 accel;
     float rotation, rotation_x;
     void draw(glm::mat4 VP);
-    glm::vec3 get_extreme();
     void set_position(float x, float y, float z);
     void tick();
     void left();
@@ -25,7 +24,6 @@ public:
     void jump();
 private:
     VAO *cannon;
-    float net_calculate(float v_x, float v_y);
 };
 
 #endif // BOAT_H
