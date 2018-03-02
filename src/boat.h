@@ -10,21 +10,28 @@ public:
     Boat() {}
     Boat(float x, float y, float z);
     glm::vec3 position;
+    glm::vec3 speed;
+    glm::vec3 accel;
     float rotation;
-    Cannon cannon1;
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
+    void add_cannon(float x, float y, float z);
+    bool is_cannon_added;
     void tick();
-    double speed;
     void left();
     void right();
     void down();
     void up();
+    void forward();
+    void back();
+    void jump();
+    Cannon cannon;
 private:
     VAO *base;
     VAO *side;
-    VAO * face;
-    GLUquadricObj *quadratic;
+    VAO *face;
+    VAO *pole;
+
 };
 
 #endif // BOAT_H

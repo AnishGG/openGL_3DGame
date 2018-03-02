@@ -19,6 +19,7 @@ struct color_t {
     int g;
     int b;
 };
+
 static const double PI = 3.14159265;
 
 // nonedit.cpp
@@ -77,17 +78,19 @@ bool detect_collision(bounding_box_t a, bounding_box_t b);
 extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();
 
+double getRandomDouble(double l, double r);
+
 // ---- Colors ----
 extern const color_t COLOR_RED;
 extern const color_t COLOR_GREEN;
 extern const color_t COLOR_BLACK;
-extern const color_t COLOR_BACKGROUND;
-extern const color_t COLOR_BALL1;
-extern const color_t COLOR_BALL2;
-extern const color_t COLOR_BALL3;
-extern const color_t COLOR_BALL4;
-extern const color_t COLOR_BALL8;
-extern const color_t COLOR_BALL6;
 extern const color_t COLOR_BLUE;
+extern const color_t COLOR_BROWN1;
+extern const color_t COLOR_BROWN2;
+extern const color_t COLOR_BROWN3;
+extern const color_t COLOR_GRAY;
+extern const color_t COLOR_BACKGROUND;
+extern const color_t COLOR_PINK;
+extern const color_t COLOR_YELLOW;
 
 #endif

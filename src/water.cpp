@@ -1,28 +1,28 @@
 #include "water.h"
 #include "main.h"
 
-Water::Water(float x, float y, float z) 
+Water::Water(float x, float y, float z,float siz) 
 {
     this->position = glm::vec3(x, y, z);
     this->rotation = 0;
-
+    this->size = siz;
     GLfloat surface_vertex_buffer_data[] = {
-        -1000.0f, -1000.0f, 0.0f,
-        -1000.0f, 1000.0f, 0.0f,
-        1000.0f,  1000.0f, 0.0f,
+        -size*1.0f, -size*1.0f, 0.0f,
+        -size*1.0f, size*1.0f, 0.0f,
+        size*1.0f,  size*1.0f, 0.0f,
 
-        1000.0f,  1000.0f, 0.0f,
-        1000.0f,  -1000.0f, 0.0f,
-        -1000.0f, -1000.0f, 0.0f,
+        size*1.0f,  size*1.0f, 0.0f,
+        size*1.0f,  -size*1.0f, 0.0f,
+        -size*1.0f, -size*1.0f, 0.0f,
     };
     GLfloat base_vertex_buffer_data[] ={
-        -1000.0f, -1000.0f, -10.0f,
-        -1000.0f, 1000.0f, -10.0f,
-        1000.0f,  1000.0f, -10.0f,
+        -size*1.0f, -size*1.0f, -10.0f,
+        -size*1.0f, size*1.0f, -10.0f,
+        size*1.0f,  size*1.0f, -10.0f,
 
-        1000.0f,  1000.0f, -10.0f,
-        1000.0f,  -1000.0f, -10.0f,
-        -1000.0f, -1000.0f, -10.0f,
+        size*1.0f,  size*1.0f, -10.0f,
+        size*1.0f,  -size*1.0f, -10.0f,
+        -size*1.0f, -size*1.0f, -10.0f,
 
     };
     // Glfloat side_vertex_buffer_data[] ={
