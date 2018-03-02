@@ -1,4 +1,4 @@
-#ifndef MAIN_H
+    #ifndef MAIN_H
 #define MAIN_H
 
 #include <iostream>
@@ -69,8 +69,10 @@ enum direction_t { DIR_UP, DIR_RIGHT, DIR_DOWN, DIR_LEFT };
 struct bounding_box_t {
     float x;
     float y;
+    float z;
     float width;
     float height;
+    float length;
 };
 
 bool detect_collision(bounding_box_t a, bounding_box_t b);

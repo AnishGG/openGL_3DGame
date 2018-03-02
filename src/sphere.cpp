@@ -86,20 +86,3 @@ void Sphere::decelarate(){
 void Sphere::set_speed(float x, float y, float z){
     this->speed = glm::vec3(x, y, z);
 }
-
-void Sphere::right()
-{
-    this->position.x += 0.5;
-}
-void Sphere::left()
-{
-    this->position.x -= 0.5;
-}
-void Sphere::up()
-{
-    this->position.z += 0.5;
-}
-void Sphere::down()
-{
-    this->position.z -= 0.5;
-}

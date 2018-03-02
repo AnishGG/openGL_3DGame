@@ -16,13 +16,7 @@ class Rock
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
     void tick();
-    // void left();
-    // void right();
-    // void down();
-    // void up();
-    // void forward();
-    // void back();
-    // void jump();
+    bounding_box_t bounding_box();
 
   private:
     VAO *object;

@@ -62,23 +62,34 @@ void Cylinder::tick()
 {
     this->position += this->speed;
     this->speed += this->accel;
-    if(this->position.z < 0)
-    {
-        if(this->accel.z < 0)
-        {
+    this->deaccelerate();
+}
+
+void Cylinder::deaccelerate(){
+    /* Changing the deaccelaration for the jump of the boat */
+    if(this->position.z < 0){
+        if(this->accel.z < 0){
             this->accel.z = 0;
             this->speed.z = 0;
         }
-        if(this->position.z <= -1)
-        {
+        if(this->position.z <= -1){
             this->speed.z = 0.1;
         }
     }
-    if(this->position.z > 0)
-    {
+    if(this->position.z > 0){
         this->accel.z = -0.1;
     }
+    /********************************************************/
+    if(this->speed.x > 0.0001)
+        speed.x -= 0.005;
+    else if(this->speed.x < -0.0001)
+        speed.x += 0.005;
+    if(this->speed.y > 0.0001)
+        speed.y -= 0.005;
+    else if(speed.y < 0.0001)
+        speed.y += 0.005;
 }
+
 void Cylinder::jump()
 {
     if(this->position.z <= 0)
@@ -102,11 +113,15 @@ void Cylinder::down()
 }
 void Cylinder::forward()
 {
-    this->position.y += 0.5*cos(this->rotation*PI/180.0);
-    this->position.x += 0.5*sin(this->rotation*PI/180.0);
+    if(fabs(speed.y) < 0.5)
+        this->speed.y += 0.05*cos(this->rotation*PI/180.0);
+    if(fabs(speed.x) < 0.5)
+        this->speed.x += 0.05*sin(this->rotation*PI/180.0);
 }
 void Cylinder::back()
 {
-    this->position.y -= 0.5*cos(this->rotation*PI/180.0);
-    this->position.x -= 0.5*sin(this->rotation*PI/180.0);
+    if(-fabs(speed.y) > -0.5)
+        this->speed.y -= 0.05*cos(this->rotation*PI/180.0);
+    if(-fabs(speed.x) > -0.5)
+        this->speed.x -= 0.05*sin(this->rotation*PI/180.0);
 }

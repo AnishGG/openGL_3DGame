@@ -23,6 +23,7 @@ public:
     void forward();
     void back();
     void jump();
+    void deaccelerate();
 private:
     VAO *cannon;
     float net_calculate(float v_x, float v_y);

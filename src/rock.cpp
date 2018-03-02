@@ -59,3 +59,13 @@ void Rock::set_position(float x, float y, float z)
 {
     this->position = glm::vec3(x, y, z);
 }
+
+bounding_box_t Rock::bounding_box() {
+    float w, h, l;
+    float x = this->position.x;
+    float y = this->position.y;
+    float z = this->position.z;
+    w = h = l = this->radius + 5.0;
+    bounding_box_t bbox = { x,y,z,w,h,l};
+    return bbox;
+}

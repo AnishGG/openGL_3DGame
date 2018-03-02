@@ -17,10 +17,12 @@ public:
     float rotation;
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
+    void set_speed(glm::vec3 speed);
     void add_cannon(float x, float y, float z, float height);
     void add_poal(float x, float y, float z, float height, float radius);
     glm::vec3 release_fireball();
     bool is_cannon_added, is_pole_added, is_fireball_present;
+    bounding_box_t bounding_box();
     void tick();
     void left();
     void right();
@@ -29,6 +31,7 @@ public:
     void forward();
     void back();
     void jump();
+    void deaccelerate();
     Cannon cannon;
     Cylinder pole;
     Sphere fireball;

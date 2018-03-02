@@ -22,6 +22,7 @@ public:
     void forward();
     void back();
     void jump();
+    void deaccelerate();
 private:
     VAO *cannon;
 };

@@ -55,7 +55,7 @@ void draw()
         break;
     case 1:
         eye = glm::vec3(boat1.position.x, boat1.position.y + 2*cos(boat1.rotation*PI/180.0), boat1.position.z + 3);
-        target = glm::vec3(boat1.position.x + sin(boat1.rotation*PI/180.0), (boat1.position.y + 4.0*cos(boat1.rotation*PI/180.0)), boat1.position.z + 2 + fabs(sin(boat1.rotation*PI/180.0)));
+        target = glm::vec3(boat1.position.x + 2*sin(boat1.rotation*PI/180.0), (boat1.position.y + 4.0*cos(boat1.rotation*PI/180.0)), boat1.position.z + 2 + fabs(sin(boat1.rotation*PI/180.0)));
         up = glm::vec3(0, 0, 1);
         break;
     case 2:
@@ -148,7 +148,14 @@ void tick_input(GLFWwindow *window) {
 }
 
 void tick_elements() {
+    static int count = 0;
     boat1.tick();
+    for(int i = 0;i < rocks.size(); i++){
+        if(detect_collision(boat1.bounding_box(), rocks[i].bounding_box())){
+            cout << count++ << endl;
+            boat1.set_speed(glm::vec3(0, 0, 0));
+        }
+    }
 //    cannon1.tick();
 }
 
@@ -162,7 +169,6 @@ void initGL(GLFWwindow *window, int width, int height)
     water1 = Water(0, 0, -2,500);
     boat1 = Boat(0, 0, 0);
     boat1.add_cannon(0, 0, 0, 3);
-//    boat1.release_fireball();
     boat1.add_poal(0, 0, 0, 8, 0.1);
     for(int i=0;i<rocks.size();i++)
     {
@@ -235,7 +241,8 @@ int main(int argc, char **argv) {
 
 bool detect_collision(bounding_box_t a, bounding_box_t b) {
     return (abs(a.x - b.x) * 2 < (a.width + b.width)) &&
-           (abs(a.y - b.y) * 2 < (a.height + b.height));
+            (abs(a.y - b.y) * 2 < (a.height + b.height)) &&
+            (abs(a.z - b.z) * 2 < (a.length + b.length));
 }
 
 void reset_screen() {

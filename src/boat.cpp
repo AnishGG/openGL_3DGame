@@ -96,34 +96,51 @@ void Boat::set_position(float x, float y, float z)
 {
     this->position = glm::vec3(x, y, z);
     this->cannon.set_position(x, y, z);
+    this->pole.set_position(x, y, z);
+}
+
+void Boat::set_speed(glm::vec3 speed){
+    this->speed = speed;
+    this->pole.speed = speed;
+    this->cannon.speed = speed;
 }
 
 void Boat::tick() 
 {
     this->position += this->speed;
     this->speed += this->accel;
-    if(this->position.z < 0)
-    {
-        if(this->accel.z < 0)
-        {
-            this->accel.z = 0;
-            this->speed.z = 0;
-        }
-        if(this->position.z <= -1)
-        {
-            this->speed.z = 0.1;
-        }
-    }
-    if(this->position.z > 0)
-    {
-        this->accel.z = -0.1;
-    }
+    this->deaccelerate();
     if(this->is_cannon_added)
         this->cannon.tick();
     if(this->is_pole_added)
         this->pole.tick();
     if(this->is_fireball_present)
         this->fireball.tick();
+}
+
+void Boat::deaccelerate(){
+    /* Changing the deaccelaration for the jump of the boat */
+    if(this->position.z < 0){
+        if(this->accel.z < 0){
+            this->accel.z = 0;
+            this->speed.z = 0;
+        }
+        if(this->position.z <= -1){
+            this->speed.z = 0.1;
+        }
+    }
+    if(this->position.z > 0){
+        this->accel.z = -0.1;
+    }
+    /********************************************************/
+    if(this->speed.x > 0.0001)
+        speed.x -= 0.005;
+    else if(this->speed.x < -0.0001)
+        speed.x += 0.005;
+    if(this->speed.y > 0.0001)
+        speed.y -= 0.005;
+    else if(speed.y < 0.0001)
+        speed.y += 0.005;
 }
 
 void Boat::add_cannon(float x, float y, float z, float height){
@@ -194,8 +211,10 @@ void Boat::down()
 }
 void Boat::forward()
 {
-    this->position.y += 0.5*cos(this->rotation*PI/180.0);
-    this->position.x += 0.5*sin(this->rotation*PI/180.0);
+    if(fabs(speed.y) < 0.5)
+        this->speed.y += 0.05*cos(this->rotation*PI/180.0);
+    if(fabs(speed.x) < 0.5)
+        this->speed.x += 0.05*sin(this->rotation*PI/180.0);
     if(this->is_cannon_added)
         this->cannon.forward();
     if(this->is_pole_added)
@@ -203,10 +222,23 @@ void Boat::forward()
 }
 void Boat::back()
 {
-    this->position.y -= 0.5*cos(this->rotation*PI/180.0);
-    this->position.x -= 0.5*sin(this->rotation*PI/180.0);
+    if(-fabs(speed.y) > -0.5)
+        this->speed.y -= 0.05*cos(this->rotation*PI/180.0);
+    if(-fabs(speed.x) > -0.5)
+        this->speed.x -= 0.05*sin(this->rotation*PI/180.0);
     if(this->is_cannon_added)
         this->cannon.back();
     if(this->is_pole_added)
         this->pole.back();
+}
+
+bounding_box_t Boat::bounding_box() {
+    float x = this->position.x;
+    float y = this->position.y;
+    float z = this->position.z;
+    float w = 4;
+    float h = 3;
+    float l = 8;
+    bounding_box_t bbox = { x,y,z,w,h,l};
+    return bbox;
 }

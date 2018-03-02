@@ -14,10 +14,6 @@ public:
     void set_position(float x, float y, float z);
     void decelarate();
     void tick();
-    void left();
-    void right();
-    void down();
-    void up();
     void set_speed(float x, float y, float z);
 private:
     VAO *object;
