@@ -2,6 +2,7 @@
 #include "cannon.h"
 #include "cylinder.h"
 #include "sphere.h"
+#include "sail.h"
 
 #ifndef BOAT_H
 #define BOAT_H
@@ -14,15 +15,19 @@ public:
     glm::vec3 position;
     glm::vec3 speed;
     glm::vec3 accel;
+    glm::vec3 wind_speed;
     float rotation;
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
     void set_speed(glm::vec3 speed);
     void add_cannon(float x, float y, float z, float height);
     void add_poal(float x, float y, float z, float height, float radius);
+    void add_sail();
     glm::vec3 release_fireball();
-    bool is_cannon_added, is_pole_added, is_fireball_present;
+    bool is_cannon_added, is_pole_added, is_fireball_present, is_sail_added;
+    bool is_wind_blowing;
     bounding_box_t bounding_box();
+    void blow_wind(), stop_wind();
     void tick();
     void left();
     void right();
@@ -35,6 +40,7 @@ public:
     Cannon cannon;
     Cylinder pole;
     Sphere fireball;
+    Sail sail;
 private:
     VAO *base;
     VAO *side;

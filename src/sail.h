@@ -1,19 +1,23 @@
 #include "main.h"
+#include "cannon.h"
+#include "cylinder.h"
+#include "sphere.h"
 
-#ifndef CYLINDER_H
-#define CYLINDER_H
+#ifndef SAIL_H
+#define SAIL_H
 
 
-class Cylinder {
+class Sail {
 public:
-    Cylinder() {}
-    Cylinder(float x, float y, float z, float height, float radius);
+    Sail() {}
+    Sail(glm::vec3 one, glm::vec3 two, glm::vec3 three, glm::vec3 rotation_point);
     glm::vec3 position;
     glm::vec3 speed;
     glm::vec3 accel;
-    float rotation, rotation_x, height;
+    float rotation;
     void draw(glm::mat4 VP);
     void set_position(float x, float y, float z);
+    void set_speed(glm::vec3 speed);
     void tick();
     void left();
     void right();
@@ -24,7 +28,7 @@ public:
     void jump();
     void deaccelerate();
 private:
-    VAO *cannon;
+    VAO *base;
 };
 
-#endif // BOAT_H
+#endif // SAIL_H

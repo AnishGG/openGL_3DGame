@@ -11,3 +11,4 @@ const color_t COLOR_BLUE = { 50, 100, 239};
 const color_t COLOR_GRAY = { 125, 128, 132};
 const color_t COLOR_PINK = {255, 182, 193};
 const color_t COLOR_YELLOW = {255, 255, 0};
+const color_t COLOR_WHITE  = {255, 255, 255};

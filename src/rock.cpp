@@ -65,7 +65,7 @@ bounding_box_t Rock::bounding_box() {
     float x = this->position.x;
     float y = this->position.y;
     float z = this->position.z;
-    w = h = l = this->radius + 5.0;
-    bounding_box_t bbox = { x,y,z,w,h,l};
+    w = h = l = 2*this->radius;
+    bounding_box_t bbox = {x,y,z,w,h,l};
     return bbox;
 }

@@ -15,6 +15,7 @@ GLFWwindow *window;
 * Customizable functions *
 **************************/
 
+long long time_count;
 Boat boat1;
 Water water1;
 Boat boat2;
@@ -152,10 +153,11 @@ void tick_elements() {
     boat1.tick();
     for(int i = 0;i < rocks.size(); i++){
         if(detect_collision(boat1.bounding_box(), rocks[i].bounding_box())){
-            cout << count++ << endl;
             boat1.set_speed(glm::vec3(0, 0, 0));
+            boat1.stop_wind();
         }
     }
+    boat1.sail.rotation += 0.1;
 //    cannon1.tick();
 }
 
@@ -166,10 +168,13 @@ void initGL(GLFWwindow *window, int width, int height)
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
+    time_count = 0;
     water1 = Water(0, 0, -2,500);
     boat1 = Boat(0, 0, 0);
     boat1.add_cannon(0, 0, 0, 3);
     boat1.add_poal(0, 0, 0, 8, 0.1);
+    boat1.add_sail();
+//    boat1.blow_wind();
     for(int i=0;i<rocks.size();i++)
     {
         rocks[i] = Rock( 
@@ -230,7 +235,12 @@ int main(int argc, char **argv) {
             tick_input(window);
         }
         if(t1.processTick()){
+            time_count++;
             myfun(window);
+            if(time_count % 10 == 0)
+                boat1.stop_wind();
+            else if(time_count % 5 == 0)
+                boat1.blow_wind();
         }
         // Poll for Keyboard and mouse events
         glfwPollEvents();

@@ -5,6 +5,7 @@ Cylinder::Cylinder(float x, float y, float z, float height, float radius) {
     this->position = glm::vec3(x, y, z);
     this->rotation = 0;
     this->rotation_x = 0;
+    this->height = height;
     this->speed = glm::vec3(0, 0, 0);
     this->accel = glm::vec3(0, 0, 0);
     glm::vec3 end1 = glm::vec3(x, 3.0 + y - height/2, 1.5 + z);
