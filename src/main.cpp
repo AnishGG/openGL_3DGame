@@ -4,6 +4,7 @@
 #include "water.h"
 #include "rock.h"
 #include "cannon.h"
+#include "monster.h"
 
 using namespace std;
 
@@ -20,7 +21,9 @@ Boat boat1;
 Water water1;
 Boat boat2;
 Cannon cannon1;
+Monster monster;
 vector<Rock> rocks(250);
+vector<Monster> monsters(5);
 
 glm::vec3 eye,target,up;
 
@@ -86,20 +89,21 @@ void draw()
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
     // Scene render
+    for(int i = 0;i < monsters.size(); i++){
+        monsters[i].draw(VP);
+    }
+    monster.draw(VP);
     water1.draw(VP);
     boat1.draw(VP);
-    for(int i=0;i<rocks.size();i++)
-    {
+    for(int i=0;i<rocks.size();i++){
         rocks[i].draw(VP);
     }
 }
 
 void myfun(GLFWwindow *window){
     int view = glfwGetKey(window, GLFW_KEY_C);
-    if(view)
-    {
+    if(view){
         defView = (defView + 1)%4;
-
     }
 }
 
@@ -137,15 +141,12 @@ void tick_input(GLFWwindow *window) {
     if(forward){
         boat1.forward();
     }
-    if(back)
-    {
+    if(back){
         boat1.back();
     }
-    if(jump)
-    {
+    if(jump){
         boat1.jump();
     }
-
 }
 
 void tick_elements() {
@@ -157,8 +158,6 @@ void tick_elements() {
             boat1.stop_wind();
         }
     }
-    boat1.sail.rotation += 0.1;
-//    cannon1.tick();
 }
 
 /* Initialize the OpenGL rendering properties */
@@ -174,9 +173,14 @@ void initGL(GLFWwindow *window, int width, int height)
     boat1.add_cannon(0, 0, 0, 3);
     boat1.add_poal(0, 0, 0, 8, 0.1);
     boat1.add_sail();
-//    boat1.blow_wind();
-    for(int i=0;i<rocks.size();i++)
-    {
+    monster = Monster(0, 0, 0, 1);
+    for(int i = 0;i < monsters.size(); i++){
+        monsters[i] = Monster(getRandDouble(-water1.size / 5, water1.size / 5),
+                              getRandDouble(-water1.size / 5, water1.size / 5),
+                              0,
+                              getRandDouble(2, 5));
+    }
+    for(int i=0;i<rocks.size();i++){
         rocks[i] = Rock( 
             getRandDouble(-water1.size, water1.size), 
             getRandDouble(-water1.size, water1.size), 
