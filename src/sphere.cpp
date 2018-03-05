@@ -1,10 +1,11 @@
 #include "sphere.h"
 #include "main.h"
 
-Sphere::Sphere(float x, float y, float z, float radius){
+Sphere::Sphere(float x, float y, float z, float radius, color_t col1){
     this->speed = glm::vec3(0, 0, 0);
     this->position = glm::vec3(x, y, z);
     this->rotation = 0;
+    this->radius = radius;
     static GLfloat base_vertex_buffer_data[5000100];
     int i = 0, flag = 0;
     float change = 10;
@@ -38,7 +39,7 @@ Sphere::Sphere(float x, float y, float z, float radius){
             }
         }
     }
-    this->object = create3DObject(GL_TRIANGLES, i/3, base_vertex_buffer_data,COLOR_RED);
+    this->object = create3DObject(GL_TRIANGLES, i/3, base_vertex_buffer_data, col1);
 
 }
 
@@ -86,3 +87,14 @@ void Sphere::decelarate(){
 void Sphere::set_speed(float x, float y, float z){
     this->speed = glm::vec3(x, y, z);
 }
+
+bounding_box_t Sphere::bounding_box() {
+    float w, h, l;
+    float x = this->position.x;
+    float y = this->position.y;
+    float z = this->position.z;
+    w = h = l = 2*this->radius;
+    bounding_box_t bbox = {x,y,z,w,h,l};
+    return bbox;
+}
+

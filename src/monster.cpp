@@ -3,10 +3,11 @@
 
 Monster::Monster(float x, float y, float z, float rad){
     this->position = glm::vec3(x, y, z);
+    this->radius = rad;
     this->rotation = 0;
-    this->part[0] = Sphere(x - rad, y, z, rad);
-    this->part[1] = Sphere(x + rad, y, z, rad);
-    this->part[2] = Sphere(x, y, z + (float)(sqrt(2)*rad), rad);
+    this->part[0] = Sphere(x - rad, y, z, rad, COLOR_MONS1);
+    this->part[1] = Sphere(x + rad, y, z, rad, COLOR_MONS2);
+    this->part[2] = Sphere(x, y, z + (float)(sqrt(2)*rad), rad, COLOR_MONS3);
 }
 
 void Monster::draw(glm::mat4 VP){
@@ -30,7 +31,9 @@ bounding_box_t Monster::bounding_box() {
     float x = this->position.x;
     float y = this->position.y;
     float z = this->position.z;
-    w = h = l = 2*this->radius;
+    w = 4*this->radius;
+    h = 2*sqrt(2)*this->radius;
+    l = 2*this->radius;
     bounding_box_t bbox = {x,y,z,w,h,l};
     return bbox;
 }

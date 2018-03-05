@@ -12,6 +12,7 @@ Boat::Boat(float x, float y, float z) {
     this->is_fireball_present = 0;
     this->is_sail_added = 0;
     this->is_wind_blowing = 0;
+    this->is_collided = 0;
 
     // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
     // A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
@@ -126,8 +127,11 @@ void Boat::tick()
     }
     this->speed += this->accel;
     this->deaccelerate();
-    if(this->is_fireball_present)
+    if(this->is_fireball_present){
+        if(this->fireball.position.z < -1.5)
+            this->is_fireball_present = 0;
         this->fireball.tick();
+    }
 }
 
 void Boat::deaccelerate(){
@@ -210,11 +214,11 @@ void Boat::jump()
 }
 void Boat::right() 
 {
-    this->rotation += 0.5;
+    this->rotation += 0.6;
 }
 void Boat::left()
 {
-    this->rotation -= 0.5;
+    this->rotation -= 0.6;
 }
 void Boat::up()
 {

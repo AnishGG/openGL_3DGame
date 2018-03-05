@@ -5,6 +5,9 @@
 #include "rock.h"
 #include "cannon.h"
 #include "monster.h"
+#include "score.h"
+#include "digit.h"
+#include "display.h"
 
 using namespace std;
 
@@ -21,7 +24,8 @@ Boat boat1;
 Water water1;
 Boat boat2;
 Cannon cannon1;
-Monster monster;
+Score score;
+Display display;
 vector<Rock> rocks(250);
 vector<Monster> monsters(5);
 
@@ -92,12 +96,16 @@ void draw()
     for(int i = 0;i < monsters.size(); i++){
         monsters[i].draw(VP);
     }
-    monster.draw(VP);
     water1.draw(VP);
     boat1.draw(VP);
     for(int i=0;i<rocks.size();i++){
         rocks[i].draw(VP);
     }
+    /* To render the score of the player */
+    char test[10];
+    sprintf(test, "%d", score.get_score());
+    display.store(test, 10, 3);
+    display.draw(VP);
 }
 
 void myfun(GLFWwindow *window){
@@ -119,8 +127,6 @@ void tick_input(GLFWwindow *window) {
     int rotate = glfwGetKey(window, GLFW_KEY_B);
     if(fire){
         glm::vec3 hell = boat1.release_fireball();
-//        cout << hell.x << " " << hell.y << " " << hell.z << endl;a
-//        cout << boat1.fireball.position.x << " " << boat1.fireball.position.y << " " << boat1.fireball.position.z << endl;
     }
     if(rotate){
         boat1.rotation += 0.1;
@@ -150,20 +156,46 @@ void tick_input(GLFWwindow *window) {
 }
 
 void tick_elements() {
-    static int count = 0;
     boat1.tick();
+    int count = 0;
     for(int i = 0;i < rocks.size(); i++){
         if(detect_collision(boat1.bounding_box(), rocks[i].bounding_box())){
             boat1.set_speed(glm::vec3(0, 0, 0));
             boat1.stop_wind();
+            count++;
+            if(!boat1.is_collided)
+                score.subtract(1);
+        }
+    }
+    /* To handle multiple subtraction of score by collision with only one rock */
+    if(count == 0)
+        boat1.is_collided = 0;
+    else
+        boat1.is_collided = 1;
+    /**************************************************************************/
+    if(boat1.is_fireball_present){
+        for(int i = 0;i < monsters.size(); i++){
+            if(detect_collision(boat1.fireball.bounding_box(), monsters[i].bounding_box())){
+                cout << "Monster Killed" << endl;
+                monsters.erase(monsters.begin() + i);
+                score.add(5);
+            }
+        }
+    }
+    cout << score.get_score() << endl;
+    for(int i = 0;i < monsters.size(); i++){
+        if(detect_collision(boat1.bounding_box(), monsters[i].bounding_box())){
+            monsters.erase(monsters.begin() + i);
+            score.subtract(2);
         }
     }
 }
 
+//8930375999
+
 /* Initialize the OpenGL rendering properties */
 /* Add all the models to be created here */
-void initGL(GLFWwindow *window, int width, int height) 
-{
+void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
@@ -173,13 +205,16 @@ void initGL(GLFWwindow *window, int width, int height)
     boat1.add_cannon(0, 0, 0, 3);
     boat1.add_poal(0, 0, 0, 8, 0.1);
     boat1.add_sail();
-    monster = Monster(0, 0, 0, 1);
+
+    /* Initialising monsters */
     for(int i = 0;i < monsters.size(); i++){
         monsters[i] = Monster(getRandDouble(-water1.size / 5, water1.size / 5),
                               getRandDouble(-water1.size / 5, water1.size / 5),
                               0,
-                              getRandDouble(2, 5));
+                              getRandDouble(1, 3));
     }
+    /************************/
+    /* Initialising rocks */
     for(int i=0;i<rocks.size();i++){
         rocks[i] = Rock( 
             getRandDouble(-water1.size, water1.size), 
@@ -189,6 +224,10 @@ void initGL(GLFWwindow *window, int width, int height)
             getRandDouble(2, 5)
             );
     }
+    /*********************************/
+    /* Initialising the score displaying part */
+    score = Score();
+    display = Display();
     eye = glm::vec3(boat1.position.x, boat1.position.y - 15, boat1.position.z + 10);
     target = glm::vec3(boat1.position.x, boat1.position.y + 5, boat1.position.z);
     up = glm::vec3(0, 0, 1);
@@ -215,7 +254,7 @@ void initGL(GLFWwindow *window, int width, int height)
 }
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv){
     srand(time(0));
     int width  = 600;
     int height = 600;
@@ -225,10 +264,10 @@ int main(int argc, char **argv) {
     initGL (window, width, height);
 
     /* Draw in loop */
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window)){
         // Process timers
 
-        if (t60.processTick()) {
+        if (t60.processTick()){
             // 60 fps
             // OpenGL Draw commands
             draw();
@@ -241,10 +280,12 @@ int main(int argc, char **argv) {
         if(t1.processTick()){
             time_count++;
             myfun(window);
-            if(time_count % 10 == 0)
-                boat1.stop_wind();
-            else if(time_count % 5 == 0)
-                boat1.blow_wind();
+            /* To initiate the wind effect uncomment this*/
+//            if(time_count % 10 == 0)
+//                boat1.stop_wind();
+//            else if(time_count % 5 == 0)
+//                boat1.blow_wind();
+            /*********************************************/
         }
         // Poll for Keyboard and mouse events
         glfwPollEvents();
@@ -254,7 +295,7 @@ int main(int argc, char **argv) {
 }
 
 bool detect_collision(bounding_box_t a, bounding_box_t b) {
-    return (abs(a.x - b.x) * 2 < (a.width + b.width)) &&
+        return (abs(a.x - b.x) * 2 < (a.width + b.width)) &&
             (abs(a.y - b.y) * 2 < (a.height + b.height)) &&
             (abs(a.z - b.z) * 2 < (a.length + b.length));
 }

@@ -25,7 +25,7 @@ public:
     void add_sail();
     glm::vec3 release_fireball();
     bool is_cannon_added, is_pole_added, is_fireball_present, is_sail_added;
-    bool is_wind_blowing;
+    bool is_wind_blowing, is_collided;
     bounding_box_t bounding_box();
     void blow_wind(), stop_wind();
     void tick();
